@@ -13,7 +13,7 @@ export default function BasicTable({ cols, rows }) {
       component={Paper}
       sx={{
         width: "100%",
-        maxHeight: 520,
+        maxHeight: 570,
       }}
     >
       <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">

@@ -38,9 +38,9 @@ let cols = [
 ];
 export const SIP = () => {
   const [data, setData] = useState({
-    amount: 25000,
-    duration: 10,
-    rate: 12,
+    amount: 5000,
+    duration: 40,
+    rate: 15,
     inflation: 6,
   });
   const estdReturn = useMemo(() => {
@@ -95,6 +95,12 @@ export const SIP = () => {
               top: 10,
             }}
           >
+            <Box sx={{
+                mb:3,
+                textAlign: "center",
+            }}>
+                <h3>SIP Calculator</h3>
+            </Box>
             <form onSubmit={handleSubmit}>
               {SIPData.map((item) => (
                 <TextField
