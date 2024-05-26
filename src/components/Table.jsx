@@ -9,10 +9,14 @@ import Paper from "@mui/material/Paper";
 
 export default function BasicTable({ cols, rows }) {
   return (
-    <TableContainer component={Paper} sx={{
-        width:"100%"
-    }}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <TableContainer
+      component={Paper}
+      sx={{
+        width: "100%",
+        maxHeight: 520,
+      }}
+    >
+      <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             {cols.map((col) => (
