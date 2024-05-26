@@ -1,12 +1,12 @@
-# Fincial Calculator Website Documentation
+# Financial Calculator Website Documentation
 
 ## Welcome
 
-Welcome to the Fincial Calculator website project! This guide will help you understand how to run the project locally, prepare it for production, and make the most out of its features.
+Welcome to the Financial Calculator website project! This guide will help you understand how to run the project locally, prepare it for production, and make the most out of its features.
 
 ### Getting Started
 
-If you want to work on the Fincial Calculator website on your own computer, follow these steps:
+If you want to work on the Financial Calculator website on your own computer, follow these steps:
 
 1. **Open your terminal.**
 2. **Go to the project directory.**
