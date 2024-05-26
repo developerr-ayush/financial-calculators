@@ -1,0 +1,53 @@
+{
+  "name": "financialcalculator",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "compress": "gulp",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^3.11.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.18",
+    "compressorjs": "^1.2.1",
+    "cssnano": "^6.0.1",
+    "emailjs": "^4.0.3",
+    "gsap": "^3.12.4",
+    "gulp-clean": "^0.4.0",
+    "gulp-sharp-optimize-images": "^3.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
+    "react-parallax-tilt": "^1.7.177",
+    "react-router-dom": "^6.16.0",
+    "react-scroll": "^1.9.0",
+    "react-tilt": "^1.0.2",
+    "swiper": "^10.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.2",
+    "eslint": "^8.53.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
+    "gulp": "^4.0.2",
+    "postcss": "^8.4.32",
+    "postcss-color-function": "^4.1.0",
+    "postcss-combine-media-query": "^1.0.1",
+    "postcss-custom-properties": "^13.3.3",
+    "postcss-extract-media-query": "^3.0.0",
+    "postcss-load-config": "^4.0.1",
+    "sass": "^1.68.0",
+    "vite": "^5.0.0"
+  }
+}

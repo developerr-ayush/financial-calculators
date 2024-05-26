@@ -1,0 +1,10 @@
+{
+  "map": true,
+  "plugins": {
+    "postcss-combine-media-query": {},
+    "autoprefixer": {},
+    "postcss-custom-properties": {},
+    "postcss-color-function": {},
+    "cssnano": {}
+  }
+}
