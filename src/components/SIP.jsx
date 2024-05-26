@@ -47,7 +47,7 @@ export const SIP = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    let { amount, duration, rate, inflation } = data;
+    let { amount, duration, rate } = data;
     let total = 0;
     let investment = 0;
     let interest = 0;
