@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && netlify deploy --prod",
     "compress": "gulp",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -18,7 +18,6 @@
     "compressorjs": "^1.2.1",
     "cssnano": "^6.0.1",
     "emailjs": "^4.0.3",
-    "fsevents": "^2.3.3",
     "gsap": "^3.12.4",
     "gulp-clean": "^0.4.0",
     "gulp-sharp-optimize-images": "^3.0.1",
