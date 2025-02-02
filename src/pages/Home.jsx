@@ -1,25 +1,25 @@
-import { Box, Grid, Paper, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Box, Grid, Paper, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   return (
     <Box sx={{ p: 4 }}>
       <Grid container spacing={3} justifyContent="center">
         <Grid item xs={12} sm={6} md={4}>
-          <Link to="/sip-calculator" style={{ textDecoration: 'none' }}>
+          <Link to="/sip-calculator" style={{ textDecoration: "none" }}>
             <Paper
               elevation={3}
               sx={{
                 p: 3,
-                textAlign: 'center',
-                height: '200px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                transition: '0.3s',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                }
+                textAlign: "center",
+                height: "200px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                transition: "0.3s",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
             >
               <Typography variant="h5" gutterBottom>
@@ -32,20 +32,20 @@ export const Home = () => {
           </Link>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
-          <Link to="/inflation-calculator" style={{ textDecoration: 'none' }}>
+          <Link to="/inflation-calculator" style={{ textDecoration: "none" }}>
             <Paper
               elevation={3}
               sx={{
                 p: 3,
-                textAlign: 'center',
-                height: '200px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                transition: '0.3s',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                }
+                textAlign: "center",
+                height: "200px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                transition: "0.3s",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
             >
               <Typography variant="h5" gutterBottom>
@@ -57,7 +57,33 @@ export const Home = () => {
             </Paper>
           </Link>
         </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Link to="/income-tax-calculator" style={{ textDecoration: "none" }}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                textAlign: "center",
+                height: "200px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                transition: "0.3s",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+              }}
+            >
+              <Typography variant="h5" gutterBottom>
+                Income Tax Calculator
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                Calculate your income tax under the new tax regime
+              </Typography>
+            </Paper>
+          </Link>
+        </Grid>
       </Grid>
     </Box>
-  )
-}
+  );
+};
