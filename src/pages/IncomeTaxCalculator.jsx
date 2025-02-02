@@ -15,6 +15,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
+import SEO from "../components/SEO";
 
 export function IncomeTaxCalculator() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -117,6 +118,11 @@ export function IncomeTaxCalculator() {
 
   return (
     <div>
+      <SEO
+        title="Income Tax Calculator FY 2025-26"
+        description="Calculate your income tax for FY 2025-26 under the new tax regime. Free online tax calculator with standard deduction and tax slab breakdown."
+        keywords="income tax calculator, tax calculator 2025-26, new tax regime, income tax india, standard deduction calculator"
+      />
       <div
         style={{
           backgroundColor: "#fef9c3",
