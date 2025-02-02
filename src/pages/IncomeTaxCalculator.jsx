@@ -159,11 +159,14 @@ const IncomeTaxCalculator = () => {
                 }}
               >
                 <Typography variant="body1">
-                  Standard Deduction: ₹{STANDARD_DEDUCTION.toLocaleString()}
+                  Standard Deduction: ₹
+                  {STANDARD_DEDUCTION.toLocaleString("en-IN")}
                 </Typography>
                 <Typography variant="body1">
                   Taxable Income: ₹
-                  {(parseFloat(income) - STANDARD_DEDUCTION).toLocaleString()}
+                  {(parseFloat(income) - STANDARD_DEDUCTION).toLocaleString(
+                    "en-IN"
+                  )}
                 </Typography>
               </Paper>
             )}
@@ -182,17 +185,17 @@ const IncomeTaxCalculator = () => {
                   {slabBreakdown.map((slab, index) => (
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
-                        {slab.min.toLocaleString()} -{" "}
+                        {slab.min.toLocaleString("en-IN")} -{" "}
                         {slab.max === "Above"
                           ? `${slab.max} 2,400,000`
-                          : slab.max.toLocaleString()}
+                          : slab.max.toLocaleString("en-IN")}
                       </TableCell>
                       <TableCell align="right">{slab.rate}%</TableCell>
                       <TableCell align="right">
-                        {slab.income.toLocaleString()}
+                        {slab.income.toLocaleString("en-IN")}
                       </TableCell>
                       <TableCell align="right">
-                        {slab.tax.toLocaleString()}
+                        {slab.tax.toLocaleString("en-IN")}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -211,11 +214,15 @@ const IncomeTaxCalculator = () => {
               >
                 <Typography variant="body1" gutterBottom>
                   {taxableIncome <= REBATE_LIMIT
-                    ? `Your taxable income (₹${taxableIncome.toLocaleString()}) is eligible for Section 87A rebate.`
-                    : `Your taxable income (₹${taxableIncome.toLocaleString()}) is eligible for Marginal Relief.`}
+                    ? `Your taxable income (₹${taxableIncome.toLocaleString(
+                        "en-IN"
+                      )}) is eligible for Section 87A rebate.`
+                    : `Your taxable income (₹${taxableIncome.toLocaleString(
+                        "en-IN"
+                      )}) is eligible for Marginal Relief.`}
                 </Typography>
                 <Typography variant="body1">
-                  Tax relief of ₹{rebateAmount.toLocaleString()} will be
+                  Tax relief of ₹{rebateAmount.toLocaleString("en-IN")} will be
                   provided.
                 </Typography>
               </Paper>
@@ -232,13 +239,14 @@ const IncomeTaxCalculator = () => {
               {rebateAmount > 0 ? (
                 <>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    Calculated Tax: ₹{(tax + rebateAmount).toLocaleString()}
+                    Calculated Tax: ₹
+                    {(tax + rebateAmount).toLocaleString("en-IN")}
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    Tax Relief: -₹{rebateAmount.toLocaleString()}
+                    Tax Relief: -₹{rebateAmount.toLocaleString("en-IN")}
                   </Typography>
                   <Typography variant="h5" component="h3">
-                    Final Tax Payable: ₹{tax.toLocaleString()}
+                    Final Tax Payable: ₹{tax.toLocaleString("en-IN")}
                   </Typography>
                 </>
               ) : (
