@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Container,
@@ -15,8 +16,23 @@ import {
   Checkbox,
 } from "@mui/material";
 
-const IncomeTaxCalculator = () => {
-  const [income, setIncome] = useState("");
+export function IncomeTaxCalculator() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Get initial income from URL or default to empty
+  const [income, setIncome] = useState(searchParams.get("income") || "");
+
+  // Update URL when income changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (income) params.set("income", income);
+    setSearchParams(params);
+  }, [income, setSearchParams]);
+
+  const handleIncomeChange = (e) => {
+    setIncome(e.target.value);
+  };
+
   const [tax, setTax] = useState(0);
   const [slabBreakdown, setSlabBreakdown] = useState([]);
   const [isSalaried, setIsSalaried] = useState(false);
@@ -143,7 +159,7 @@ const IncomeTaxCalculator = () => {
                 id="income"
                 name="income"
                 value={income}
-                onChange={(e) => setIncome(e.target.value)}
+                onChange={handleIncomeChange}
                 InputProps={{
                   startAdornment: "₹",
                 }}
@@ -295,6 +311,4 @@ const IncomeTaxCalculator = () => {
       </Container>
     </div>
   );
-};
-
-export { IncomeTaxCalculator };
+}
