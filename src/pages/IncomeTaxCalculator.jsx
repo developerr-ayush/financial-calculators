@@ -24,7 +24,7 @@ const IncomeTaxCalculator = () => {
   const [taxableIncome, setTaxableIncome] = useState(0);
   const STANDARD_DEDUCTION = 75000;
   const REBATE_LIMIT = 1200000;
-  const MARGINAL_RELIEF_LIMIT = 1275000;
+  const MARGINAL_RELIEF_LIMIT = 1270000;
 
   const calculateTax = () => {
     const incomeValue = parseFloat(income);
@@ -76,9 +76,8 @@ const IncomeTaxCalculator = () => {
       setTax(0);
     } else if (taxableIncomeValue <= MARGINAL_RELIEF_LIMIT) {
       // Marginal Relief calculation
-      const excessIncome = taxableIncomeValue - REBATE_LIMIT;
-      const marginalReliefTax = excessIncome * 0.1; // 10% of excess amount
-      const finalTax = Math.min(calculatedTax, marginalReliefTax);
+      const excessIncome = taxableIncomeValue - REBATE_LIMIT; // Amount over 12L
+      const finalTax = excessIncome; // Tax will be equal to excess amount
 
       setRebateAmount(calculatedTax - finalTax);
       setTax(finalTax);
