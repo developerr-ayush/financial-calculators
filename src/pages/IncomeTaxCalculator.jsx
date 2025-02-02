@@ -283,7 +283,7 @@ const IncomeTaxCalculator = () => {
                 ) : (
                   <Typography variant="h5" component="h3">
                     Total Tax: ₹
-                    {tax.toLocaleString(undefined, {
+                    {tax.toLocaleString("en-IN", {
                       maximumFractionDigits: 2,
                     })}
                   </Typography>
