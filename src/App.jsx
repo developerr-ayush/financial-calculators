@@ -5,10 +5,12 @@ import { Home } from "./pages/Home";
 import { Inflation } from "./pages/Inflation";
 import { SIP } from "./components/SIP";
 import { IncomeTaxCalculator } from "./pages/IncomeTaxCalculator";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 
 function App() {
   return (
     <Router>
+      <GoogleAnalytics />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/inflation-calculator" element={<Inflation />} />
