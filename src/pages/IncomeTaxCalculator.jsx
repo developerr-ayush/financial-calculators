@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Box,
@@ -30,31 +30,33 @@ export function IncomeTaxCalculator() {
     setSearchParams(params);
   }, [income, setSearchParams]);
 
+  // Debounced function to track income
+  const debouncedTrackIncome = useCallback(
+    (value) => {
+      if (window.gtag && value) {
+        window.gtag("event", "income_input", {
+          event_category: "Tax Calculator",
+          income_value: parseFloat(value),
+          currency: "INR",
+        });
+      }
+    },
+    [] // Empty dependencies as we don't need any external values
+  );
+
+  // Setup debounced tracking
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (income) {
+        debouncedTrackIncome(income);
+      }
+    }, 2000); // 2 second delay
+
+    return () => clearTimeout(timer);
+  }, [income, debouncedTrackIncome]);
+
   const handleIncomeChange = (e) => {
     setIncome(e.target.value);
-
-    // Track income range when user types
-    if (window.gtag && e.target.value) {
-      const incomeValue = parseFloat(e.target.value);
-      const incomeRange = getIncomeRange(incomeValue);
-
-      window.gtag("event", "income_input", {
-        event_category: "Tax Calculator",
-        event_label: incomeRange,
-        income_range: incomeRange,
-      });
-    }
-  };
-
-  // Helper function to categorize income into ranges
-  const getIncomeRange = (income) => {
-    if (income <= 300000) return "0-3L";
-    if (income <= 600000) return "3L-6L";
-    if (income <= 900000) return "6L-9L";
-    if (income <= 1200000) return "9L-12L";
-    if (income <= 1500000) return "12L-15L";
-    if (income <= 2000000) return "15L-20L";
-    return "Above 20L";
   };
 
   const [tax, setTax] = useState(0);
@@ -130,25 +132,15 @@ export function IncomeTaxCalculator() {
     if (window.gtag) {
       window.gtag("event", "tax_calculated", {
         event_category: "Tax Calculator",
-        event_label: getIncomeRange(incomeValue),
-        income_range: getIncomeRange(incomeValue),
+        income_value: incomeValue,
         is_salaried: isSalaried,
         has_rebate: rebateAmount > 0,
-        tax_amount_range: getTaxRange(tax),
+        tax_amount: tax,
+        currency: "INR",
       });
     }
 
     setSlabBreakdown(breakdown);
-  };
-
-  // Helper function to categorize tax amounts
-  const getTaxRange = (taxAmount) => {
-    if (taxAmount === 0) return "No Tax";
-    if (taxAmount <= 50000) return "0-50K";
-    if (taxAmount <= 100000) return "50K-1L";
-    if (taxAmount <= 200000) return "1L-2L";
-    if (taxAmount <= 500000) return "2L-5L";
-    return "Above 5L";
   };
 
   // Add useEffect to calculate tax whenever income changes
