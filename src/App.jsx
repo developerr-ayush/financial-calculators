@@ -6,6 +6,7 @@ import { Inflation } from "./pages/Inflation";
 import { SIP } from "./components/SIP";
 import { IncomeTaxCalculator } from "./pages/IncomeTaxCalculator";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import { BudgetingCalculator } from "./components/BudgetingCalculator";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           path="/income-tax-calculator"
           element={<IncomeTaxCalculator />}
         />
+        <Route path="/budgeting-calculator" element={<BudgetingCalculator />} />
       </Routes>
     </Router>
   );
