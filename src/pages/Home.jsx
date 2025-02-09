@@ -19,8 +19,8 @@ const calculatorData = [
     description: "Calculate your income tax under the new tax regime",
   },
   {
-    path: "/budgeting-calculator",
-    title: "Budgeting Calculator",
+    path: "/budgeting-framework",
+    title: "Budgeting Framework",
     description: "Calculate your monthly budget",
   },
 ];
