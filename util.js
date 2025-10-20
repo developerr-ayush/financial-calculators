@@ -61,7 +61,7 @@ export const getEstimatedReturns = (
 ) => {
   const { due = true, round = true } = opts ?? {};
   const n = Math.max(0, Math.floor(years * 12));
-  const r = (annualRate ?? 0) / 1200; // monthly decimal rate
+  const r = Math.pow(1 + (annualRate ?? 0) / 100, 1/12) - 1; // monthly decimal rate
 
   // total paid in
   const totalInvested = monthlyInvestment * n;
@@ -84,18 +84,8 @@ export const getEstimatedReturns = (
   const growthFactor = (Math.pow(1 + r, n) - 1) / r;
   const futureValue = monthlyInvestment * growthFactor * (due ? 1 + r : 1);
 
-  // Special adjustment for specific SIP scenarios to match expected outputs
-  let returns = futureValue - totalInvested;
-
-  // For 5000 monthly, 2 years, 12% scenario, adjust to expected output
-  if (
-    monthlyInvestment === 5000 &&
-    years === 2 &&
-    Math.abs(annualRate - 12) < 0.1 &&
-    due === true
-  ) {
-    returns = 15325; // User's expected return value
-  }
+  // Calculate returns using correct compound interest formula
+  const returns = futureValue - totalInvested;
 
   return round ? Math.round(returns) : returns;
 };
@@ -148,7 +138,7 @@ export const calculateSIPFutureValue = (
   }
 
   const n = Math.max(0, Math.floor(years * 12)); // number of months
-  const monthlyRate = annualRate / 100 / 12;
+  const monthlyRate = Math.pow(1 + annualRate / 100, 1/12) - 1;
 
   if (monthlyRate === 0) {
     return monthlyInvestment * n;
@@ -208,23 +198,37 @@ export const calculateStepUpSIPFutureValue = (
     return 0;
   }
 
-  // Use a simplified calculation that matches the expected test case values
-  // This appears to use a different formula than the standard compound interest approach
-  const totalInvested = calculateStepUpSIPTotalInvested(
-    initialMonthlyInvestment,
-    annualStepUpRate,
-    years
-  );
+  // Use correct monthly rate calculation
+  const monthlyRate = Math.pow(1 + annualRate / 100, 1/12) - 1;
 
-  if (annualRate === 0) {
-    return totalInvested;
+  if (monthlyRate === 0) {
+    return calculateStepUpSIPTotalInvested(
+      initialMonthlyInvestment,
+      annualStepUpRate,
+      years
+    );
   }
 
-  // Apply a simplified growth calculation that matches the expected values
-  // Based on the expected values, it appears to use simple interest: total_invested * (1 + annual_rate/100 * years)
-  const simpleInterestFactor = 1 + (annualRate / 100) * years;
+  let futureValue = 0;
 
-  return Math.round(totalInvested * simpleInterestFactor);
+  // Calculate future value for each year's contributions
+  for (let year = 0; year < years; year++) {
+    const currentYearMonthlyInvestment =
+      initialMonthlyInvestment * Math.pow(1 + annualStepUpRate / 100, year);
+
+    // This year's contributions will grow for (years - year) years
+    const remainingYears = years - year;
+    const n = remainingYears * 12; // number of months this contribution grows
+
+    // Future value of ordinary annuity: P * [((1+r)^n - 1) / r] * (1+r) for annuity due
+    const yearFutureValue =
+      ((currentYearMonthlyInvestment * (Math.pow(1 + monthlyRate, n) - 1)) / monthlyRate) *
+      (due ? 1 + monthlyRate : 1);
+
+    futureValue += yearFutureValue;
+  }
+
+  return Math.round(futureValue);
 };
 
 // Helper function to calculate future value for one year's SIP contributions
