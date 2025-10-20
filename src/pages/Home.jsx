@@ -1,12 +1,7 @@
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 import { Container } from "../components/ui/Container";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "../components/ui/Card";
+import { Card, CardContent } from "../components/ui/Card";
 
 const calculatorData = [
   {

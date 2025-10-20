@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export const Card = ({
   children,
@@ -27,9 +28,21 @@ export const Card = ({
   );
 };
 
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(["default", "elevated", "ghost"]),
+  padding: PropTypes.oneOf(["sm", "md", "lg"]),
+};
+
 export const CardHeader = ({ children, className = "" }) => (
   <div className={`mb-4 ${className}`}>{children}</div>
 );
+
+CardHeader.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};
 
 export const CardTitle = ({ children, className = "" }) => (
   <h3 className={`text-lg font-semibold text-white ${className}`}>
@@ -37,6 +50,16 @@ export const CardTitle = ({ children, className = "" }) => (
   </h3>
 );
 
+CardTitle.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};
+
 export const CardContent = ({ children, className = "" }) => (
   <div className={className}>{children}</div>
 );
+
+CardContent.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};

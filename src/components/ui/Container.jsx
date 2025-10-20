@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 export const Container = ({
   children,
   size = "default",
@@ -25,6 +27,18 @@ export const Container = ({
   );
 };
 
+Container.propTypes = {
+  children: PropTypes.node.isRequired,
+  size: PropTypes.oneOf(["sm", "default", "lg", "xl", "full"]),
+  className: PropTypes.string,
+  padding: PropTypes.bool,
+};
+
 export const Section = ({ children, className = "" }) => (
   <section className={`py-8 ${className}`}>{children}</section>
 );
+
+Section.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};

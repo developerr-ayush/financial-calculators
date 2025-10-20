@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 export const Tabs = ({ tabs, defaultValue, className = "" }) => {
   const [activeTab, setActiveTab] = useState(defaultValue || tabs[0]?.value);
@@ -34,4 +35,20 @@ export const Tabs = ({ tabs, defaultValue, className = "" }) => {
   );
 };
 
+Tabs.propTypes = {
+  tabs: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      content: PropTypes.node.isRequired,
+    })
+  ).isRequired,
+  defaultValue: PropTypes.string,
+  className: PropTypes.string,
+};
+
 export const Tab = ({ children }) => children;
+
+Tab.propTypes = {
+  children: PropTypes.node.isRequired,
+};

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export const Input = ({
   label,
@@ -41,9 +42,26 @@ export const Input = ({
   );
 };
 
+Input.propTypes = {
+  label: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  error: PropTypes.string,
+  required: PropTypes.bool,
+};
+
 export const Label = ({ children, required, className = "" }) => (
   <label className={`block text-sm font-medium text-slate-300 ${className}`}>
     {children}
     {required && <span className="text-red-400 ml-1">*</span>}
   </label>
 );
+
+Label.propTypes = {
+  children: PropTypes.node.isRequired,
+  required: PropTypes.bool,
+  className: PropTypes.string,
+};
