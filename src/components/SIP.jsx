@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState, useEffect } from "react";
 import BasicTable from "./Table";
+import CurrencyDisplay from "./ui/CurrencyDisplay";
 import {
   Chart as ChartJS,
   CategoryScale,
