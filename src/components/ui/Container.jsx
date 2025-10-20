@@ -17,6 +17,7 @@ export const Container = ({
   return (
     <div
       className={`
+        w-full
       ${sizes[size]} mx-auto
       ${padding ? "px-4 sm:px-6 lg:px-8" : ""}
       ${className}

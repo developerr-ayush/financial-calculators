@@ -19,7 +19,7 @@ export const Inflation = () => {
         keywords="inflation calculator, purchasing power calculator, inflation impact, money value calculator"
       />
 
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className=" flex items-center justify-center p-4">
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8 max-w-md w-full shadow-2xl">
           <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Inflation Calculator
