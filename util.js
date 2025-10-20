@@ -232,26 +232,6 @@ export const calculateStepUpSIPFutureValue = (
   return Math.round(futureValue);
 };
 
-// Helper function to calculate future value for one year's SIP contributions
-const calculateYearSIPFutureValue = (
-  monthlyInvestment,
-  monthlyRate,
-  remainingYears,
-  due
-) => {
-  const n = remainingYears * 12; // remaining months
-
-  if (monthlyRate === 0) {
-    return monthlyInvestment * n;
-  }
-
-  // Future value of ordinary annuity: P * [((1+r)^n - 1) / r] * (1+r) for annuity due
-  const futureValue =
-    ((monthlyInvestment * (Math.pow(1 + monthlyRate, n) - 1)) / monthlyRate) *
-    (due ? 1 + monthlyRate : 1);
-
-  return futureValue;
-};
 
 // Calculate total invested amount for StepUp SIP
 export const calculateStepUpSIPTotalInvested = (

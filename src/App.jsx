@@ -16,7 +16,7 @@ function App() {
       <GoogleAnalytics />
       <Header />
       <main className="min-h-screen bg-slate-950 text-white flex flex-col">
-        <div className="min-h-full flex-1 pt-16 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        <div className="min-h-full flex-1 pt-16 bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import BasicTable from "./Table";
 import {
   Chart as ChartJS,
@@ -310,7 +310,7 @@ export const StepUpSIP = () => {
         } gap-8`}
       >
         {/* Input Form */}
-        <Card className="sticky top-24 max-w-md w-full mx-auto">
+        <Card className="lg:sticky top-24 max-w-md w-full mx-auto">
           <CardHeader className="text-center">
             <CardTitle>Step-up SIP Calculator</CardTitle>
             <p className="text-sm text-slate-400 mt-2">

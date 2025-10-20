@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 
 const SEO = ({ title, description, keywords }) => {
@@ -37,6 +38,12 @@ const SEO = ({ title, description, keywords }) => {
   }, [title, description, keywords, location]);
 
   return null;
+};
+
+SEO.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  keywords: PropTypes.string.isRequired,
 };
 
 export default SEO;

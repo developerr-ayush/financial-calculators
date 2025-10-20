@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import BasicTable from "./Table";
 import {
   Chart as ChartJS,
@@ -88,7 +88,9 @@ const TABLE_COLUMNS = [
 const getInitialData = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const getParam = (key, defaultValue) => {
-    const value = Number(urlParams.get(key));
+    const paramValue = urlParams.get(key);
+    if (paramValue === null) return defaultValue;
+    const value = Number(paramValue);
     return Number.isFinite(value) ? value : defaultValue;
   };
 
@@ -340,7 +342,7 @@ export const SIP = () => {
         } gap-8`}
       >
         {/* Input Form */}
-        <Card className="sticky top-24">
+        <Card className="lg:sticky top-24">
           <CardHeader className="text-center">
             <CardTitle>SIP Calculator</CardTitle>
             <p className="text-sm text-slate-400 mt-2">

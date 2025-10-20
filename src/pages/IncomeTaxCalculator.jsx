@@ -152,7 +152,7 @@ export function IncomeTaxCalculator() {
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
             Income Tax Calculator (New Regime) FY 25-26
           </h1>
         </div>
@@ -286,7 +286,7 @@ export function IncomeTaxCalculator() {
               </div>
             )}
 
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 shadow-lg">
+            <div className="bg-linear-to-r from-blue-600 to-purple-600 rounded-xl p-6 shadow-lg">
               {rebateAmount > 0 ? (
                 <div>
                   <p className="text-blue-100 mb-2">
