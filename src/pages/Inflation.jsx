@@ -12,7 +12,7 @@ export const Inflation = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4">
+    <div className="p-4 pt-20">
       <SEO
         title="Inflation Calculator"
         description="Calculate the impact of inflation on your money over time. See how much purchasing power your money loses due to inflation."

@@ -139,7 +139,7 @@ export function IncomeTaxCalculator() {
   }, [income, isSalaried]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="pt-20">
       <SEO
         title="Income Tax Calculator FY 2025-26"
         description="Calculate your income tax for FY 2025-26 under the new tax regime. Free online tax calculator with standard deduction and tax slab breakdown."

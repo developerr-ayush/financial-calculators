@@ -1,11 +1,39 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import BasicTable from "./Table";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 import {
   getCurrency,
   getEstimatedReturns,
   getInflationAdjValue,
   getInvestedAmount,
 } from "../../util";
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+// Import UI components
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { Card, CardHeader, CardTitle, CardContent } from "./ui/Card";
+import { Container } from "./ui/Container";
 let SIPData = [
   {
     name: "amount",
@@ -30,12 +58,126 @@ let SIPData = [
 ];
 let cols = ["Years", "Invested", "Interest", "Total Returns", "Present Value"];
 export const SIP = () => {
-  const [data, setData] = useState({
-    amount: 5000,
-    duration: 40,
-    rate: 15,
-    inflation: 6,
-  });
+  // Function to get initial data from URL params or defaults
+  const getInitialData = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+      amount: parseInt(urlParams.get("amount")) || 5000,
+      duration: parseInt(urlParams.get("duration")) || 40,
+      rate: parseInt(urlParams.get("rate")) || 15,
+      inflation: parseInt(urlParams.get("inflation")) || 6,
+    };
+  };
+
+  const [data, setData] = useState(getInitialData);
+  const [activeTab, setActiveTab] = useState("chart"); // 'chart' or 'table'
+
+  // Function to update URL parameters
+  const updateURL = (newData) => {
+    const urlParams = new URLSearchParams();
+    Object.keys(newData).forEach((key) => {
+      if (newData[key] && newData[key] !== "") {
+        urlParams.set(key, newData[key]);
+      }
+    });
+    const newURL = `${window.location.pathname}?${urlParams.toString()}`;
+    window.history.replaceState({}, "", newURL);
+  };
+
+  // Function to generate chart data
+  const getChartData = useCallback((calcData) => {
+    const { amount, duration, rate, inflation } = calcData;
+    const years = [];
+    const investedAmounts = [];
+    const totalReturns = [];
+    const presentValues = [];
+
+    for (let i = 1; i <= duration; i++) {
+      years.push(`Year ${i}`);
+      const invested = amount * i * 12;
+      const interest = getEstimatedReturns(amount, rate, i);
+      const total = invested + interest;
+      const inflationAdjusted = getInflationAdjValue(total, inflation, i);
+
+      investedAmounts.push(invested);
+      totalReturns.push(total);
+      presentValues.push(total - inflationAdjusted);
+    }
+
+    return {
+      labels: years,
+      datasets: [
+        {
+          label: "Invested Amount",
+          data: investedAmounts,
+          borderColor: "rgb(59, 130, 246)", // blue-500
+          backgroundColor: "rgba(59, 130, 246, 0.1)",
+          tension: 0.3,
+        },
+        {
+          label: "Total Returns",
+          data: totalReturns,
+          borderColor: "rgb(16, 185, 129)", // emerald-500
+          backgroundColor: "rgba(16, 185, 129, 0.1)",
+          tension: 0.3,
+        },
+        {
+          label: "Present Value",
+          data: presentValues,
+          borderColor: "rgb(245, 101, 101)", // red-400
+          backgroundColor: "rgba(245, 101, 101, 0.1)",
+          tension: 0.3,
+        },
+      ],
+    };
+  }, []);
+
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "rgb(148, 163, 184)", // slate-400
+          font: {
+            size: 12,
+          },
+        },
+      },
+      title: {
+        display: true,
+        text: "SIP Investment Growth Over Time",
+        color: "rgb(148, 163, 184)", // slate-400
+        font: {
+          size: 16,
+          weight: "bold",
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "rgb(148, 163, 184)", // slate-400
+        },
+        grid: {
+          color: "rgba(148, 163, 184, 0.1)", // slate-400 with opacity
+        },
+      },
+      y: {
+        ticks: {
+          color: "rgb(148, 163, 184)", // slate-400
+          callback: function (value) {
+            return "₹" + (value / 100000).toFixed(0) + "L";
+          },
+        },
+        grid: {
+          color: "rgba(148, 163, 184, 0.1)", // slate-400 with opacity
+        },
+      },
+    },
+  };
+
   const estdReturn = useMemo(() => {
     return getEstimatedReturns(data.amount, data.rate, data.duration);
   }, [data]);
@@ -54,111 +196,180 @@ export const SIP = () => {
     return totalVal - inflationAdjusted;
   }, [data, totalVal]);
   const [rows, setRows] = useState([]);
+
+  // Function to calculate table data
+  const calculateTableData = useCallback((calcData) => {
+    let { amount, duration, rate, inflation } = calcData;
+    let temp = [];
+    for (let i = 1; i <= duration; i++) {
+      let invested = amount * i * 12;
+      let interest = getEstimatedReturns(amount, rate, i);
+      let totalReturns = invested + interest;
+      let inflationAdjusted = getInflationAdjValue(totalReturns, inflation, i);
+      temp.push([
+        i,
+        getCurrency(invested),
+        getCurrency(interest),
+        getCurrency(totalReturns),
+        getCurrency(totalReturns - inflationAdjusted),
+      ]);
+    }
+    return temp;
+  }, []);
+
   const handleChange = (e) => {
     // make sure input is number
     if (isNaN(e.target.value)) {
       return;
     }
-    setData({ ...data, [e.target.name]: e.target.value });
+    const newData = { ...data, [e.target.name]: e.target.value };
+    setData(newData);
+    updateURL(newData);
   };
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      let { amount, duration, rate, inflation } = data;
-      let temp = [];
-      for (let i = 1; i <= duration; i++) {
-        let invested = amount * i * 12;
-        let interest = getEstimatedReturns(amount, rate, i);
-        let totalReturns = invested + interest;
-        let inflationAdjusted = getInflationAdjValue(
-          totalReturns,
-          inflation,
-          i
-        );
-        temp.push([
-          i,
-          getCurrency(invested),
-          getCurrency(interest),
-          getCurrency(totalReturns),
-          getCurrency(totalReturns - inflationAdjusted),
-        ]);
-      }
-
-      setRows(temp);
+      // Recalculate table data if needed
+      setRows(calculateTableData(data));
     },
-    [data, totalVal]
+    [data, calculateTableData]
   );
+
+  // Auto-calculate table data when component mounts or data changes
+  useEffect(() => {
+    setRows(calculateTableData(data));
+  }, [data, calculateTableData]);
+
+  // Memoize chart data to prevent unnecessary re-renders
+  const chartData = useMemo(() => getChartData(data), [data, getChartData]);
+
+  // Update URL when data changes
+  useEffect(() => {
+    updateURL(data);
+  }, [data]);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 sticky top-4 shadow-2xl">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  SIP Calculator
-                </h3>
-              </div>
+    <Container size="xl" className="pt-8">
+      <div
+        className={`grid grid-cols-1 ${
+          rows.length > 0 ? "lg:grid-cols-2" : "lg:grid-cols-1"
+        } gap-8`}
+      >
+        {/* Input Form */}
+        <Card className="sticky top-24">
+          <CardHeader className="text-center">
+            <CardTitle>SIP Calculator</CardTitle>
+          </CardHeader>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {SIPData.map((item) => (
-                  <div key={item.name}>
-                    <input
-                      type={item.type}
-                      id={item.name}
-                      name={item.name}
-                      value={data[item.name]}
-                      onChange={handleChange}
-                      placeholder={item.label}
-                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    />
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {SIPData.map((item) => (
+                <Input
+                  key={item.name}
+                  label={item.label}
+                  type={item.type}
+                  id={item.name}
+                  name={item.name}
+                  value={data[item.name]}
+                  step={100}
+                  onChange={handleChange}
+                  placeholder={`Enter ${item.label.toLowerCase()}`}
+                  required
+                />
+              ))}
+
+              <Button type="submit" className="w-full">
+                Calculate
+              </Button>
+            </form>
+
+            {/* Summary */}
+            {rows.length > 0 && (
+              <div className="mt-8 space-y-4 pt-6 border-t border-white/10">
+                <h4 className="font-medium text-white mb-3">
+                  Investment Summary
+                </h4>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/5 rounded-lg p-3">
+                    <p className="text-sm text-slate-400">Invested Amount</p>
+                    <p className="font-semibold text-green-400">
+                      {getCurrency(totalInv)}
+                    </p>
                   </div>
-                ))}
-
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                >
-                  Show Me Magic
-                </button>
-              </form>
-
-              <div className="mt-6 space-y-3">
-                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                  <span className="text-slate-300">Invested Amount</span>
-                  <span className="font-semibold text-green-400">
-                    {getCurrency(totalInv)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                  <span className="text-slate-300">Estimated Returns</span>
-                  <span className="font-semibold text-green-400">
-                    {getCurrency(estdReturn)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                  <span className="text-slate-300">Total Value</span>
-                  <span className="font-semibold text-green-400">
-                    {getCurrency(totalVal)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                  <span className="text-slate-300">Present Value</span>
-                  <span className="font-semibold text-green-400">
-                    {getCurrency(presentVal)}
-                  </span>
+                  <div className="bg-white/5 rounded-lg p-3">
+                    <p className="text-sm text-slate-400">Estimated Returns</p>
+                    <p className="font-semibold text-green-400">
+                      {getCurrency(estdReturn)}
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-3">
+                    <p className="text-sm text-slate-400">Total Value</p>
+                    <p className="font-semibold text-green-400">
+                      {getCurrency(totalVal)}
+                    </p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-3">
+                    <p className="text-sm text-slate-400">Present Value</p>
+                    <p className="font-semibold text-green-400">
+                      {getCurrency(presentVal)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            )}
+          </CardContent>
+        </Card>
 
-          {rows.length > 0 && (
-            <div className="lg:col-span-2">
-              <BasicTable cols={cols} rows={rows} />
-            </div>
-          )}
-        </div>
+        {/* Results */}
+        {rows.length > 0 && (
+          <Card>
+            <CardContent className="p-0">
+              {/* Tab Navigation */}
+              <div className="flex border-b border-white/10">
+                <button
+                  onClick={() => setActiveTab("chart")}
+                  className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                    activeTab === "chart"
+                      ? "text-blue-400 border-b-2 border-blue-400"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  📊 Chart
+                </button>
+                <button
+                  onClick={() => setActiveTab("table")}
+                  className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                    activeTab === "table"
+                      ? "text-blue-400 border-b-2 border-blue-400"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  📋 Table
+                </button>
+              </div>
+
+              {/* Tab Content */}
+              <div className="p-6">
+                {activeTab === "chart" ? (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium text-white">
+                      Investment Growth
+                    </h3>
+                    <Line data={chartData} options={chartOptions} />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium text-white">
+                      Year-by-Year Breakdown
+                    </h3>
+                    <BasicTable cols={cols} rows={rows} />
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
-    </div>
+    </Container>
   );
 };
