@@ -1,4 +1,3 @@
-import { Box, Grid, Paper, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
@@ -18,67 +17,46 @@ const calculatorData = [
     title: "Income Tax Calculator",
     description: "Calculate your income tax under the new tax regime",
   },
-  {
-    path: "/budgeting-framework",
-    title: "Budgeting Framework",
-    description: "Calculate your monthly budget",
-  },
 ];
 
 export const Home = () => {
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4">
       <SEO
         title="Financial Calculators"
         description="Free online financial calculators for Income Tax, SIP, Inflation and more. Plan your finances better with our easy-to-use calculators."
         keywords="financial calculators, tax calculator, SIP calculator, inflation calculator, finance tools"
       />
 
-      <Box
-        sx={{ p: 4, bgcolor: "#121212", color: "#ffffff", borderRadius: "8px" }}
-      >
-        <Typography variant="h4" align="center" gutterBottom>
-          Welcome to Financial Calculators
-        </Typography>
-        <Typography variant="body1" align="center" sx={{ mb: 4 }}>
-          Choose a calculator to help you manage your finances effectively.
-        </Typography>
-        <Grid container spacing={3}>
-          {calculatorData.map(({ path, title, description, icon }) => (
-            <Grid item xs={12} sm={6} md={4} key={path}>
-              <Link to={path} style={{ textDecoration: "none" }}>
-                <Paper
-                  elevation={6}
-                  sx={{
-                    p: 3,
-                    textAlign: "center",
-                    height: "250px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    bgcolor: "#1e1e1e",
-                    border: "1px solid #333",
-                    borderRadius: "8px",
-                    transition: "0.3s",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      boxShadow: 20,
-                    },
-                  }}
-                >
-                  {icon}
-                  <Typography variant="h5" gutterBottom sx={{ mt: 2 }}>
-                    {title}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {description}
-                  </Typography>
-                </Paper>
-              </Link>
-            </Grid>
+      <div className="max-w-6xl mx-auto bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-slate-700">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+            Welcome to Financial Calculators
+          </h1>
+          <p className="text-slate-300 text-lg">
+            Choose a calculator to help you manage your finances effectively.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {calculatorData.map(({ path, title, description }) => (
+            <Link
+              key={path}
+              to={path}
+              className="group block transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+            >
+              <div className="bg-slate-700/50 backdrop-blur-sm border border-slate-600 rounded-xl p-6 h-64 flex flex-col justify-center items-center text-center transition-all duration-300 hover:bg-slate-600/50 hover:border-slate-500">
+                <h3 className="text-2xl font-semibold text-white mb-3 group-hover:text-blue-300 transition-colors">
+                  {title}
+                </h3>
+                <p className="text-slate-400 group-hover:text-slate-300 transition-colors">
+                  {description}
+                </p>
+              </div>
+            </Link>
           ))}
-        </Grid>
-      </Box>
+        </div>
+      </div>
     </div>
   );
 };

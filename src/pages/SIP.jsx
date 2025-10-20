@@ -1,18 +1,9 @@
-import { Box } from "@mui/material";
 import { SIP } from "../components/SIP";
 
 export const Home = () => {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        p: 3,
-      }}
-    >
+    <div className="min-h-screen flex justify-center items-center p-4">
       <SIP />
-    </Box>
+    </div>
   );
 };

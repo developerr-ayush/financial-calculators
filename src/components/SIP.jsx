@@ -1,4 +1,3 @@
-import { Box, Button, Card, Grid, TextField } from "@mui/material";
 import { useCallback, useMemo, useState } from "react";
 import BasicTable from "./Table";
 import {
@@ -29,13 +28,7 @@ let SIPData = [
     label: "Enter Inflation Rate",
   },
 ];
-let cols = [
-  "Years",
-  "Invested",
-  "Interest",
-  "Total Returns",
-  "Present Value",
-];
+let cols = ["Years", "Invested", "Interest", "Total Returns", "Present Value"];
 export const SIP = () => {
   const [data, setData] = useState({
     amount: 5000,
@@ -68,110 +61,104 @@ export const SIP = () => {
     }
     setData({ ...data, [e.target.name]: e.target.value });
   };
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-    let { amount, duration, rate, inflation } = data;
-    let temp = [];
-    for (let i = 1; i <= duration; i++) {
-      let invested = amount * i * 12;
-      let interest = getEstimatedReturns(amount, rate, i);
-      let totalReturns = invested + interest;
-      let inflationAdjusted = getInflationAdjValue(totalReturns, inflation, i);
-      temp.push([i, getCurrency(invested), getCurrency(interest), getCurrency(totalReturns), getCurrency(totalReturns - inflationAdjusted)]);
-    }
-  
-    setRows(temp);
-  }, [data, totalVal]);
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      let { amount, duration, rate, inflation } = data;
+      let temp = [];
+      for (let i = 1; i <= duration; i++) {
+        let invested = amount * i * 12;
+        let interest = getEstimatedReturns(amount, rate, i);
+        let totalReturns = invested + interest;
+        let inflationAdjusted = getInflationAdjValue(
+          totalReturns,
+          inflation,
+          i
+        );
+        temp.push([
+          i,
+          getCurrency(invested),
+          getCurrency(interest),
+          getCurrency(totalReturns),
+          getCurrency(totalReturns - inflationAdjusted),
+        ]);
+      }
+
+      setRows(temp);
+    },
+    [data, totalVal]
+  );
   return (
-    <Box>
-      <Grid container spacing={2} justifyContent={"center"}>
-        <Grid item md={4} sx={{ width: "100%" }}>
-          <Card
-            sx={{
-              p: 2,
-              width: { xs: "100%", sm: "auto" },
-              margin: "auto",
-              position: "sticky",
-              top: 10,
-            }}
-          >
-            <Box sx={{
-                mb:3,
-                textAlign: "center",
-            }}>
-                <h3>SIP Calculator</h3>
-            </Box>
-            <form onSubmit={handleSubmit}>
-              {SIPData.map((item) => (
-                <TextField
-                  sx={{ mb: 2, width: "100%" }}
-                  key={item.name}
-                  id="outlined-error"
-                  label={item.label}
-                  value={data[item.name]}
-                  name={item.name}
-                  onChange={handleChange}
-                />
-              ))}
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{
-                  width: "100%",
-                  fontWeight: "bold",
-                }}
-              >
-                Show Me Magic
-              </Button>
-            </form>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mt: 2,
-              }}
-            >
-              <p>Invested Amount</p>
-              <p>{getCurrency(totalInv)}</p>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mt: 2,
-              }}
-            >
-              <p>Estimated Returns</p>
-              <p>{getCurrency(estdReturn)}</p>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mt: 2,
-              }}
-            >
-              <p>Total Value</p>
-              <p>{getCurrency(totalVal)}</p>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mt: 2,
-              }}
-            >
-              <p>Present Value</p>
-              <p>{getCurrency(presentVal)}</p>
-            </Box>
-          </Card>
-        </Grid>
-        {!!rows.length && (
-          <Grid item md={8} sx={{ width: "100%" }}>
-            <BasicTable cols={cols} rows={rows} />
-          </Grid>
-        )}
-      </Grid>
-    </Box>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1">
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 sticky top-4 shadow-2xl">
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  SIP Calculator
+                </h3>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {SIPData.map((item) => (
+                  <div key={item.name}>
+                    <input
+                      type={item.type}
+                      id={item.name}
+                      name={item.name}
+                      value={data[item.name]}
+                      onChange={handleChange}
+                      placeholder={item.label}
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    />
+                  </div>
+                ))}
+
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                >
+                  Show Me Magic
+                </button>
+              </form>
+
+              <div className="mt-6 space-y-3">
+                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
+                  <span className="text-slate-300">Invested Amount</span>
+                  <span className="font-semibold text-green-400">
+                    {getCurrency(totalInv)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
+                  <span className="text-slate-300">Estimated Returns</span>
+                  <span className="font-semibold text-green-400">
+                    {getCurrency(estdReturn)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
+                  <span className="text-slate-300">Total Value</span>
+                  <span className="font-semibold text-green-400">
+                    {getCurrency(totalVal)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
+                  <span className="text-slate-300">Present Value</span>
+                  <span className="font-semibold text-green-400">
+                    {getCurrency(presentVal)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {rows.length > 0 && (
+            <div className="lg:col-span-2">
+              <BasicTable cols={cols} rows={rows} />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };

@@ -1,20 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import {
-  Box,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
 import SEO from "../components/SEO";
 
 export function IncomeTaxCalculator() {
@@ -154,204 +139,189 @@ export function IncomeTaxCalculator() {
   }, [income, isSalaried]);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       <SEO
         title="Income Tax Calculator FY 2025-26"
         description="Calculate your income tax for FY 2025-26 under the new tax regime. Free online tax calculator with standard deduction and tax slab breakdown."
         keywords="income tax calculator, tax calculator 2025-26, new tax regime, income tax india, standard deduction calculator"
       />
-      <div
-        style={{
-          backgroundColor: "#fef9c3",
-          borderLeft: "4px solid #eab308",
-          color: "#854d0e",
-          padding: "1rem",
-          marginBottom: "1rem",
-          borderRadius: "0.25rem",
-        }}
-      >
-        <p style={{ fontWeight: "bold" }}>Disclaimer:</p>
-        <ul
-          style={{
-            marginLeft: "1.25rem",
-            marginTop: "0.5rem",
-            listStyleType: "disc",
-          }}
-        >
-          <li>This calculator assumes you are an Indian resident individual</li>
-          <li>
-            The calculations provided are estimates and may not be 100% accurate
-          </li>
-          <li>
-            Please consult with a tax professional for precise tax planning
-          </li>
-        </ul>
-      </div>
-      <Container maxWidth="md">
-        <Box sx={{ py: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom align="center">
+
+      <div className="max-w-4xl mx-auto p-4">
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 mb-6 rounded-lg">
+          <p className="font-bold mb-2">Disclaimer:</p>
+          <ul className="ml-5 mt-2 list-disc space-y-1">
+            <li>
+              This calculator assumes you are an Indian resident individual
+            </li>
+            <li>
+              The calculations provided are estimates and may not be 100%
+              accurate
+            </li>
+            <li>
+              Please consult with a tax professional for precise tax planning
+            </li>
+          </ul>
+        </div>
+
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
             Income Tax Calculator (New Regime) FY 25-26
-          </Typography>
+          </h1>
+        </div>
 
-          <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <TextField
-                fullWidth
-                label="Annual Income"
-                type="number"
-                id="income"
-                name="income"
-                value={income}
-                onChange={handleIncomeChange}
-                InputProps={{
-                  startAdornment: "₹",
-                }}
-                variant="outlined"
-                required
-                helperText="Enter your total annual income"
-                inputProps={{
-                  min: "0",
-                  step: "1000",
-                  "aria-label": "Annual income in rupees",
-                }}
+        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 mb-6 shadow-2xl">
+          <div className="space-y-4">
+            <div className="relative">
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Annual Income
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400">
+                  ₹
+                </span>
+                <input
+                  type="number"
+                  id="income"
+                  name="income"
+                  value={income}
+                  onChange={handleIncomeChange}
+                  min="0"
+                  step="1000"
+                  placeholder="Enter your total annual income"
+                  className="w-full pl-8 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  aria-label="Annual income in rupees"
+                />
+              </div>
+              <p className="text-sm text-slate-400 mt-1">
+                Enter your total annual income
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-3 pt-2">
+              <input
+                type="checkbox"
+                id="salaried"
+                checked={isSalaried}
+                onChange={(e) => setIsSalaried(e.target.checked)}
+                className="w-4 h-4 text-blue-600 bg-slate-700 border-slate-600 rounded focus:ring-blue-500 focus:ring-2"
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isSalaried}
-                    onChange={(e) => setIsSalaried(e.target.checked)}
-                    color="primary"
-                  />
-                }
-                label="Salaried Individual (Standard Deduction: ₹75,000)"
-                sx={{ mt: 1 }}
-              />
-            </Box>
-          </Paper>
+              <label htmlFor="salaried" className="text-slate-300">
+                Salaried Individual (Standard Deduction: ₹75,000)
+              </label>
+            </div>
+          </div>
+        </div>
 
-          {income && (
-            <Paper elevation={3} sx={{ p: 4 }}>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Tax Breakdown
-              </Typography>
+        {income && (
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 shadow-2xl">
+            <h2 className="text-2xl font-bold text-white mb-6">
+              Tax Breakdown
+            </h2>
 
-              {isSalaried && (
-                <Paper
-                  sx={{
-                    p: 2,
-                    mb: 3,
-                    bgcolor: "info.light",
-                    color: "info.contrastText",
-                  }}
-                >
-                  <Typography variant="body1">
-                    Standard Deduction: ₹
-                    {STANDARD_DEDUCTION.toLocaleString("en-IN")}
-                  </Typography>
-                  <Typography variant="body1">
-                    Taxable Income: ₹
-                    {(parseFloat(income) - STANDARD_DEDUCTION).toLocaleString(
-                      "en-IN"
-                    )}
-                  </Typography>
-                </Paper>
-              )}
+            {isSalaried && (
+              <div className="bg-blue-600/20 border border-blue-500/30 rounded-lg p-4 mb-6">
+                <p className="text-blue-100 mb-1">
+                  Standard Deduction: ₹
+                  {STANDARD_DEDUCTION.toLocaleString("en-IN")}
+                </p>
+                <p className="text-blue-100">
+                  Taxable Income: ₹
+                  {(parseFloat(income) - STANDARD_DEDUCTION).toLocaleString(
+                    "en-IN"
+                  )}
+                </p>
+              </div>
+            )}
 
-              <TableContainer
-                component={Paper}
-                variant="outlined"
-                sx={{ mb: 3 }}
-              >
-                <Table aria-label="tax breakdown table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Income Slab (₹)</TableCell>
-                      <TableCell align="right">Rate (%)</TableCell>
-                      <TableCell align="right">Income in Slab (₹)</TableCell>
-                      <TableCell align="right">Tax Amount (₹)</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
+            <div className="bg-slate-700/30 rounded-lg overflow-hidden mb-6">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-slate-900/90">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                        Income Slab (₹)
+                      </th>
+                      <th className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                        Rate (%)
+                      </th>
+                      <th className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                        Income in Slab (₹)
+                      </th>
+                      <th className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                        Tax Amount (₹)
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-600">
                     {slabBreakdown.map((slab, index) => (
-                      <TableRow key={index}>
-                        <TableCell component="th" scope="row">
+                      <tr
+                        key={index}
+                        className="hover:bg-slate-700/30 transition-colors"
+                      >
+                        <td className="px-6 py-4 text-sm text-slate-300">
                           {slab.min.toLocaleString("en-IN")} -{" "}
                           {slab.max === "Above"
                             ? `${slab.max} 2,400,000`
                             : slab.max.toLocaleString("en-IN")}
-                        </TableCell>
-                        <TableCell align="right">{slab.rate}%</TableCell>
-                        <TableCell align="right">
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-300 text-right">
+                          {slab.rate}%
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-300 text-right">
                           {slab.income.toLocaleString("en-IN")}
-                        </TableCell>
-                        <TableCell align="right">
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-300 text-right">
                           {slab.tax.toLocaleString("en-IN")}
-                        </TableCell>
-                      </TableRow>
+                        </td>
+                      </tr>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-              {rebateAmount > 0 && (
-                <Paper
-                  sx={{
-                    p: 2,
-                    mb: 3,
-                    bgcolor: "success.light",
-                    color: "success.contrastText",
-                  }}
-                >
-                  <Typography variant="body1" gutterBottom>
-                    {taxableIncome <= REBATE_LIMIT
-                      ? `Your taxable income (₹${taxableIncome.toLocaleString(
-                          "en-IN"
-                        )}) is eligible for Section 87A rebate.`
-                      : `Your taxable income (₹${taxableIncome.toLocaleString(
-                          "en-IN"
-                        )}) is eligible for Marginal Relief.`}
-                  </Typography>
-                  <Typography variant="body1">
-                    Tax relief of ₹{rebateAmount.toLocaleString("en-IN")} will
-                    be provided.
-                  </Typography>
-                </Paper>
+            {rebateAmount > 0 && (
+              <div className="bg-green-600/20 border border-green-500/30 rounded-lg p-4 mb-6">
+                <p className="text-green-100 mb-2">
+                  {taxableIncome <= REBATE_LIMIT
+                    ? `Your taxable income (₹${taxableIncome.toLocaleString(
+                        "en-IN"
+                      )}) is eligible for Section 87A rebate.`
+                    : `Your taxable income (₹${taxableIncome.toLocaleString(
+                        "en-IN"
+                      )}) is eligible for Marginal Relief.`}
+                </p>
+                <p className="text-green-100">
+                  Tax relief of ₹{rebateAmount.toLocaleString("en-IN")} will be
+                  provided.
+                </p>
+              </div>
+            )}
+
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 shadow-lg">
+              {rebateAmount > 0 ? (
+                <div>
+                  <p className="text-blue-100 mb-2">
+                    Calculated Tax: ₹
+                    {(tax + rebateAmount).toLocaleString("en-IN")}
+                  </p>
+                  <p className="text-blue-100 mb-2">
+                    Tax Relief: -₹{rebateAmount.toLocaleString("en-IN")}
+                  </p>
+                  <h3 className="text-2xl font-bold text-white">
+                    Final Tax Payable: ₹{tax.toLocaleString("en-IN")}
+                  </h3>
+                </div>
+              ) : (
+                <h3 className="text-2xl font-bold text-white">
+                  Total Tax: ₹
+                  {tax.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+                </h3>
               )}
-
-              <Paper
-                elevation={6}
-                sx={{
-                  p: 3,
-                  bgcolor: "primary.main",
-                  color: "primary.contrastText",
-                }}
-              >
-                {rebateAmount > 0 ? (
-                  <>
-                    <Typography variant="body1" sx={{ mb: 1 }}>
-                      Calculated Tax: ₹
-                      {(tax + rebateAmount).toLocaleString("en-IN")}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 1 }}>
-                      Tax Relief: -₹{rebateAmount.toLocaleString("en-IN")}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                      Final Tax Payable: ₹{tax.toLocaleString("en-IN")}
-                    </Typography>
-                  </>
-                ) : (
-                  <Typography variant="h5" component="h3">
-                    Total Tax: ₹
-                    {tax.toLocaleString("en-IN", {
-                      maximumFractionDigits: 2,
-                    })}
-                  </Typography>
-                )}
-              </Paper>
-            </Paper>
-          )}
-        </Box>
-      </Container>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
