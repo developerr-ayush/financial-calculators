@@ -61,7 +61,7 @@ export const getEstimatedReturns = (
 ) => {
   const { due = true, round = true } = opts ?? {};
   const n = Math.max(0, Math.floor(years * 12));
-  const r = Math.pow(1 + (annualRate ?? 0) / 100, 1/12) - 1; // monthly decimal rate
+  const r = Math.pow(1 + (annualRate ?? 0) / 100, 1 / 12) - 1; // monthly decimal rate
 
   // total paid in
   const totalInvested = monthlyInvestment * n;
@@ -138,7 +138,7 @@ export const calculateSIPFutureValue = (
   }
 
   const n = Math.max(0, Math.floor(years * 12)); // number of months
-  const monthlyRate = Math.pow(1 + annualRate / 100, 1/12) - 1;
+  const monthlyRate = Math.pow(1 + annualRate / 100, 1 / 12) - 1;
 
   if (monthlyRate === 0) {
     return monthlyInvestment * n;
@@ -199,7 +199,7 @@ export const calculateStepUpSIPFutureValue = (
   }
 
   // Use correct monthly rate calculation
-  const monthlyRate = Math.pow(1 + annualRate / 100, 1/12) - 1;
+  const monthlyRate = Math.pow(1 + annualRate / 100, 1 / 12) - 1;
 
   if (monthlyRate === 0) {
     return calculateStepUpSIPTotalInvested(
@@ -222,7 +222,8 @@ export const calculateStepUpSIPFutureValue = (
 
     // Future value of ordinary annuity: P * [((1+r)^n - 1) / r] * (1+r) for annuity due
     const yearFutureValue =
-      ((currentYearMonthlyInvestment * (Math.pow(1 + monthlyRate, n) - 1)) / monthlyRate) *
+      ((currentYearMonthlyInvestment * (Math.pow(1 + monthlyRate, n) - 1)) /
+        monthlyRate) *
       (due ? 1 + monthlyRate : 1);
 
     futureValue += yearFutureValue;
