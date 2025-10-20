@@ -2,25 +2,37 @@ import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 import { Container } from "../components/ui/Container";
 import { Card, CardContent } from "../components/ui/Card";
+import {
+  FaChartLine,
+  FaPiggyBank,
+  FaCalculator,
+  FaChartPie,
+} from "react-icons/fa";
 
 const calculatorData = [
   {
     path: "/sip-calculator",
     title: "SIP Calculator",
     description: "Calculate your SIP investments and returns",
-    icon: "📈",
+    icon: <FaChartLine className="text-4xl" />,
+  },
+  {
+    path: "/stepup-sip-calculator",
+    title: "Step-up SIP Calculator",
+    description: "Calculate step-up SIP investments with annual increases",
+    icon: <FaChartPie className="text-4xl" />,
   },
   {
     path: "/inflation-calculator",
     title: "Inflation Calculator",
     description: "Calculate the impact of inflation on your money",
-    icon: "💰",
+    icon: <FaPiggyBank className="text-4xl" />,
   },
   {
     path: "/income-tax-calculator",
     title: "Income Tax Calculator",
     description: "Calculate your income tax under the new tax regime",
-    icon: "📊",
+    icon: <FaCalculator className="text-4xl" />,
   },
 ];
 
@@ -48,7 +60,7 @@ export const Home = () => {
             <Link key={path} to={path} className="group">
               <Card className="h-full transition-all duration-200 hover:scale-105 hover:bg-white/10">
                 <CardContent className="flex flex-col items-center text-center space-y-4">
-                  <div className="text-4xl">{icon}</div>
+                  <div className="text-blue-400">{icon}</div>
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
                       {title}

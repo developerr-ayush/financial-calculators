@@ -53,85 +53,73 @@ export function IncomeTaxCalculator() {
   const REBATE_LIMIT = 1200000;
   const MARGINAL_RELIEF_LIMIT = 1270000;
 
-  const calculateTax = () => {
-    const incomeValue = parseFloat(income);
-
-    if (isNaN(incomeValue) || incomeValue < 0) {
-      alert("Please enter a valid income.");
-      return;
-    }
-
-    // Apply standard deduction for salaried individuals
-    const taxableIncomeValue = isSalaried
-      ? Math.max(0, incomeValue - STANDARD_DEDUCTION)
-      : incomeValue;
-
-    setTaxableIncome(taxableIncomeValue);
-
-    let calculatedTax = 0;
-    const breakdown = [];
-
-    const slabs = [
-      { min: 0, max: 400000, rate: 0 },
-      { min: 400000, max: 800000, rate: 0.05 },
-      { min: 800000, max: 1200000, rate: 0.1 },
-      { min: 1200000, max: 1600000, rate: 0.15 },
-      { min: 1600000, max: 2000000, rate: 0.2 },
-      { min: 2000000, max: 2400000, rate: 0.25 },
-      { min: 2400000, max: Infinity, rate: 0.3 },
-    ];
-
-    for (const slab of slabs) {
-      const applicableIncome = Math.max(
-        0,
-        Math.min(taxableIncomeValue, slab.max) - slab.min
-      );
-      const slabTax = applicableIncome * slab.rate;
-      calculatedTax += slabTax;
-      breakdown.push({
-        min: slab.min,
-        max: slab.max === Infinity ? "Above" : slab.max,
-        rate: slab.rate * 100,
-        income: applicableIncome,
-        tax: slabTax,
-      });
-    }
-
-    // Check for rebate and marginal relief
-    if (taxableIncomeValue <= REBATE_LIMIT) {
-      setRebateAmount(calculatedTax);
-      setTax(0);
-    } else if (taxableIncomeValue <= MARGINAL_RELIEF_LIMIT) {
-      // Marginal Relief calculation
-      const excessIncome = taxableIncomeValue - REBATE_LIMIT; // Amount over 12L
-      const finalTax = excessIncome; // Tax will be equal to excess amount
-
-      setRebateAmount(calculatedTax - finalTax);
-      setTax(finalTax);
-    } else {
-      setRebateAmount(0);
-      setTax(calculatedTax);
-    }
-
-    // Track successful tax calculation
-    if (window.gtag) {
-      window.gtag("event", "tax_calculated", {
-        event_category: "Tax Calculator",
-        income_value: incomeValue,
-        is_salaried: isSalaried,
-        has_rebate: rebateAmount > 0,
-        tax_amount: tax,
-        currency: "INR",
-      });
-    }
-
-    setSlabBreakdown(breakdown);
-  };
-
   // Add useEffect to calculate tax whenever income changes
   useEffect(() => {
+    const calculateTaxInternal = () => {
+      const incomeValue = parseFloat(income);
+
+      if (isNaN(incomeValue) || incomeValue < 0) {
+        alert("Please enter a valid income.");
+        return;
+      }
+
+      // Apply standard deduction for salaried individuals
+      const taxableIncomeValue = isSalaried
+        ? Math.max(0, incomeValue - STANDARD_DEDUCTION)
+        : incomeValue;
+
+      setTaxableIncome(taxableIncomeValue);
+
+      let calculatedTax = 0;
+      const breakdown = [];
+
+      const slabs = [
+        { min: 0, max: 400000, rate: 0 },
+        { min: 400000, max: 800000, rate: 0.05 },
+        { min: 800000, max: 1200000, rate: 0.1 },
+        { min: 1200000, max: 1600000, rate: 0.15 },
+        { min: 1600000, max: 2000000, rate: 0.2 },
+        { min: 2000000, max: 2400000, rate: 0.25 },
+        { min: 2400000, max: Infinity, rate: 0.3 },
+      ];
+
+      for (const slab of slabs) {
+        const applicableIncome = Math.max(
+          0,
+          Math.min(taxableIncomeValue, slab.max) - slab.min
+        );
+        const slabTax = applicableIncome * slab.rate;
+        calculatedTax += slabTax;
+        breakdown.push({
+          min: slab.min,
+          max: slab.max === Infinity ? "Above" : slab.max,
+          rate: slab.rate * 100,
+          income: applicableIncome,
+          tax: slabTax,
+        });
+      }
+
+      // Check for rebate and marginal relief
+      if (taxableIncomeValue <= REBATE_LIMIT) {
+        setRebateAmount(calculatedTax);
+        setTax(0);
+      } else if (taxableIncomeValue <= MARGINAL_RELIEF_LIMIT) {
+        // Marginal Relief calculation
+        const normalTax = calculatedTax;
+        const taxOnRebateLimit = 0; // Since rebate limit gives 0 tax
+        const marginalRelief = normalTax - taxOnRebateLimit;
+        setRebateAmount(marginalRelief);
+        setTax(normalTax - marginalRelief);
+      } else {
+        setRebateAmount(0);
+        setTax(calculatedTax);
+      }
+
+      setSlabBreakdown(breakdown);
+    };
+
     if (income) {
-      calculateTax();
+      calculateTaxInternal();
     } else {
       setTax(0);
       setSlabBreakdown([]);
