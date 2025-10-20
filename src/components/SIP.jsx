@@ -251,7 +251,7 @@ export const SIP = () => {
     <Container size="xl" className="pt-8">
       <div
         className={`grid grid-cols-1 ${
-          rows.length > 0 ? "lg:grid-cols-2" : "lg:grid-cols-1"
+          rows.length > 0 ? "lg:grid-cols-3" : "lg:grid-cols-1"
         } gap-8`}
       >
         {/* Input Form */}
@@ -322,7 +322,7 @@ export const SIP = () => {
 
         {/* Results */}
         {rows.length > 0 && (
-          <Card>
+          <Card className="lg:col-span-2">
             <CardContent className="p-0">
               {/* Tab Navigation */}
               <div className="flex border-b border-white/10">

@@ -93,92 +93,99 @@ export const StepUpSIP = () => {
   };
 
   // Function to calculate step-up SIP returns
-  const getStepUpSIPReturns = useCallback((monthlyInvestment, stepUpPercent, annualRate, years) => {
-    let totalInvested = 0;
-    let futureValue = 0;
-    const monthlyRate = annualRate / 12 / 100;
+  const getStepUpSIPReturns = useCallback(
+    (monthlyInvestment, stepUpPercent, annualRate, years) => {
+      let totalInvested = 0;
+      let futureValue = 0;
+      const monthlyRate = annualRate / 12 / 100;
 
-    for (let year = 1; year <= years; year++) {
-      // Calculate monthly investment for this year (with step-up)
-      const currentYearMonthlyInvestment = monthlyInvestment * Math.pow(1 + stepUpPercent / 100, year - 1);
+      for (let year = 1; year <= years; year++) {
+        // Calculate monthly investment for this year (with step-up)
+        const currentYearMonthlyInvestment =
+          monthlyInvestment * Math.pow(1 + stepUpPercent / 100, year - 1);
 
-      // Total investment for this year
-      const yearlyInvestment = currentYearMonthlyInvestment * 12;
-      totalInvested += yearlyInvestment;
+        // Total investment for this year
+        const yearlyInvestment = currentYearMonthlyInvestment * 12;
+        totalInvested += yearlyInvestment;
 
-      // Calculate future value of this year's investments
-      // Future value = PMT * [((1 + r)^n - 1) / r] * (1 + r)
-      // Where:
-      // PMT = monthly investment for this year
-      // r = monthly rate
-      // n = number of months left until end
-      const monthsLeft = (years - year + 1) * 12;
-      const yearFutureValue =
-        currentYearMonthlyInvestment *
-        ((Math.pow(1 + monthlyRate, monthsLeft) - 1) / monthlyRate) *
-        (1 + monthlyRate);
+        // Calculate future value of this year's investments
+        // Future value = PMT * [((1 + r)^n - 1) / r] * (1 + r)
+        // Where:
+        // PMT = monthly investment for this year
+        // r = monthly rate
+        // n = number of months left until end
+        const monthsLeft = (years - year + 1) * 12;
+        const yearFutureValue =
+          currentYearMonthlyInvestment *
+          ((Math.pow(1 + monthlyRate, monthsLeft) - 1) / monthlyRate) *
+          (1 + monthlyRate);
 
-      futureValue += yearFutureValue;
-    }
+        futureValue += yearFutureValue;
+      }
 
-    const totalReturns = futureValue - totalInvested;
-    return {
-      totalInvested: Math.round(totalInvested),
-      totalReturns: Math.round(totalReturns),
-      futureValue: Math.round(futureValue)
-    };
-  }, []);
+      const totalReturns = futureValue - totalInvested;
+      return {
+        totalInvested: Math.round(totalInvested),
+        totalReturns: Math.round(totalReturns),
+        futureValue: Math.round(futureValue),
+      };
+    },
+    []
+  );
 
   // Function to generate chart data
-  const getChartData = useCallback((calcData) => {
-    const { amount, stepUp, duration, rate, inflation } = calcData;
-    const years = [];
-    const investedAmounts = [];
-    const totalReturns = [];
-    const presentValues = [];
+  const getChartData = useCallback(
+    (calcData) => {
+      const { amount, stepUp, duration, rate, inflation } = calcData;
+      const years = [];
+      const investedAmounts = [];
+      const totalReturns = [];
+      const presentValues = [];
 
-    for (let i = 1; i <= duration; i++) {
-      years.push(`Year ${i}`);
+      for (let i = 1; i <= duration; i++) {
+        years.push(`Year ${i}`);
 
-      // Calculate cumulative data for this year
-      const yearData = getStepUpSIPReturns(amount, stepUp, rate, i);
-      const invested = yearData.totalInvested;
-      const returns = yearData.totalReturns;
-      const total = yearData.futureValue;
-      const inflationAdjusted = getInflationAdjValue(total, inflation, i);
+        // Calculate cumulative data for this year
+        const yearData = getStepUpSIPReturns(amount, stepUp, rate, i);
+        const invested = yearData.totalInvested;
+        const returns = yearData.totalReturns;
+        const total = yearData.futureValue;
+        const inflationAdjusted = getInflationAdjValue(total, inflation, i);
 
-      investedAmounts.push(invested);
-      totalReturns.push(total);
-      presentValues.push(total - inflationAdjusted);
-    }
+        investedAmounts.push(invested);
+        totalReturns.push(total);
+        presentValues.push(total - inflationAdjusted);
+      }
 
-    return {
-      labels: years,
-      datasets: [
-        {
-          label: "Invested Amount",
-          data: investedAmounts,
-          borderColor: "rgb(59, 130, 246)", // blue-500
-          backgroundColor: "rgba(59, 130, 246, 0.1)",
-          tension: 0.3,
-        },
-        {
-          label: "Total Returns",
-          data: totalReturns,
-          borderColor: "rgb(16, 185, 129)", // emerald-500
-          backgroundColor: "rgba(16, 185, 129, 0.1)",
-          tension: 0.3,
-        },
-        {
-          label: "Present Value",
-          data: presentValues,
-          borderColor: "rgb(245, 101, 101)", // red-400
-          backgroundColor: "rgba(245, 101, 101, 0.1)",
-          tension: 0.3,
-        },
-      ],
-    };
-  }, [getStepUpSIPReturns]);
+      return {
+        labels: years,
+        datasets: [
+          {
+            label: "Invested Amount",
+            data: investedAmounts,
+            borderColor: "rgb(59, 130, 246)", // blue-500
+            backgroundColor: "rgba(59, 130, 246, 0.1)",
+            tension: 0.3,
+          },
+          {
+            label: "Total Returns",
+            data: totalReturns,
+            borderColor: "rgb(16, 185, 129)", // emerald-500
+            backgroundColor: "rgba(16, 185, 129, 0.1)",
+            tension: 0.3,
+          },
+          {
+            label: "Present Value",
+            data: presentValues,
+            borderColor: "rgb(245, 101, 101)", // red-400
+            backgroundColor: "rgba(245, 101, 101, 0.1)",
+            tension: 0.3,
+          },
+        ],
+      };
+    },
+    [getStepUpSIPReturns]
+  );
 
   // Chart options
   const chartOptions = {
@@ -227,7 +234,12 @@ export const StepUpSIP = () => {
   };
 
   const calculationResults = useMemo(() => {
-    return getStepUpSIPReturns(data.amount, data.stepUp, data.rate, data.duration);
+    return getStepUpSIPReturns(
+      data.amount,
+      data.stepUp,
+      data.rate,
+      data.duration
+    );
   }, [data, getStepUpSIPReturns]);
 
   const totalInv = calculationResults.totalInvested;
@@ -246,27 +258,34 @@ export const StepUpSIP = () => {
   const [rows, setRows] = useState([]);
 
   // Function to calculate table data
-  const calculateTableData = useCallback((calcData) => {
-    let { amount, stepUp, duration, rate, inflation } = calcData;
-    let temp = [];
+  const calculateTableData = useCallback(
+    (calcData) => {
+      let { amount, stepUp, duration, rate, inflation } = calcData;
+      let temp = [];
 
-    for (let i = 1; i <= duration; i++) {
-      let yearData = getStepUpSIPReturns(amount, stepUp, rate, i);
-      let invested = yearData.totalInvested;
-      let interest = yearData.totalReturns;
-      let totalReturns = yearData.futureValue;
-      let inflationAdjusted = getInflationAdjValue(totalReturns, inflation, i);
+      for (let i = 1; i <= duration; i++) {
+        let yearData = getStepUpSIPReturns(amount, stepUp, rate, i);
+        let invested = yearData.totalInvested;
+        let interest = yearData.totalReturns;
+        let totalReturns = yearData.futureValue;
+        let inflationAdjusted = getInflationAdjValue(
+          totalReturns,
+          inflation,
+          i
+        );
 
-      temp.push([
-        i,
-        getCurrency(invested),
-        getCurrency(interest),
-        getCurrency(totalReturns),
-        getCurrency(totalReturns - inflationAdjusted),
-      ]);
-    }
-    return temp;
-  }, [getStepUpSIPReturns]);
+        temp.push([
+          i,
+          getCurrency(invested),
+          getCurrency(interest),
+          getCurrency(totalReturns),
+          getCurrency(totalReturns - inflationAdjusted),
+        ]);
+      }
+      return temp;
+    },
+    [getStepUpSIPReturns]
+  );
 
   const handleChange = (e) => {
     // make sure input is number
@@ -304,7 +323,7 @@ export const StepUpSIP = () => {
     <Container size="xl" className="pt-8">
       <div
         className={`grid grid-cols-1 ${
-          rows.length > 0 ? "lg:grid-cols-2" : "lg:grid-cols-1"
+          rows.length > 0 ? "lg:grid-cols-3" : "lg:grid-cols-1"
         } gap-8`}
       >
         {/* Input Form */}
@@ -375,7 +394,7 @@ export const StepUpSIP = () => {
 
         {/* Results */}
         {rows.length > 0 && (
-          <Card>
+          <Card className="lg:col-span-2">
             <CardContent className="p-0">
               {/* Tab Navigation */}
               <div className="flex border-b border-white/10">
